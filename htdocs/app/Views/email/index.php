@@ -123,21 +123,77 @@
         background: #15803d;
     }
 
-    .note {
-        font-size: 13px;
-        color: #64748b;
-        margin-top: 6px;
-    }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>AI Job Application Email Generator</h1>
-        <p class="subtitle">Upload your CV (PDF or DOCX) + Job description → Get a professional email</p>
-
-        <?php if (!empty($data['error'])): ?>
-        <div class="error"><?= htmlspecialchars($data['error']) ?></div>
+    .note {
+        font-size: 13px;
+        color: #64748b;
+        margin-top: 6px;
+    }
+
+    .account-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        background: #eff6ff;
+        border: 1px solid #bfdbfe;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+
+    .account-bar a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .account-bar a:hover {
+        text-decoration: underline;
+    }
+
+    .plan-badge {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        padding: 2px 10px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-left: 6px;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <?php $user = $data['user'] ?? null; ?>
+        <?php if ($user): ?>
+        <div class="account-bar">
+            <div>
+                Hi, <strong><?= htmlspecialchars($user['name']) ?></strong>
+                <span class="plan-badge"><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></span>
+                &nbsp;&middot;&nbsp;
+                CVs: <?= (int) $user['cv_uploads_count'] ?><?= $user['max_cv_uploads'] !== null ? ' / ' . (int) $user['max_cv_uploads'] : ' / unlimited' ?>
+                &nbsp;&middot;&nbsp;
+                Emails: <?= (int) $user['emails_generated_count'] ?><?= $user['max_emails'] !== null ? ' / ' . (int) $user['max_emails'] : ' / unlimited' ?>
+            </div>
+            <div>
+                <?php if (($user['role'] ?? '') === 'admin'): ?>
+                <a href="/user">Admin Panel</a> &nbsp;&middot;&nbsp;
+                <?php endif; ?>
+                <a href="/auth/logout">Log Out</a>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <h1>AI Job Application Email Generator</h1>
+        <p class="subtitle">Upload your CV (PDF or DOCX) + Job description &rarr; Get a professional email</p>
+
+        <?php if (!empty($data['error'])): ?>
+        <div class="error"><?= htmlspecialchars($data['error']) ?></div>
         <?php endif; ?>
 
         <form method="POST" enctype="multipart/form-data" action="/email">

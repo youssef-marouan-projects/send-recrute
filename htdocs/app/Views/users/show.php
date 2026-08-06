@@ -1,50 +1,37 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title><?= $data['title'] ?></title>
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    .card {
-        background: #f9f9f9;
-        padding: 20px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-    }
-
-    p {
-        margin: 10px 0;
-    }
-
-    a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    </style>
-</head>
-
-<body>
-    <h1>User Details</h1>
-
-    <div class="card">
-        <p><strong>ID:</strong> <?= $data['user']['id'] ?></p>
-        <p><strong>Name:</strong> <?= htmlspecialchars($data['user']['name']) ?></p>
-        <p><strong>Email:</strong> <?= htmlspecialchars($data['user']['email']) ?></p>
-    </div>
-
-    <br>
-    <a href="/user/edit/<?= $data['user']['id'] ?>">Edit</a> |
-    <a href="/user">← Back to list</a>
-</body>
-
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><?= htmlspecialchars($data['title']) ?></title>
+    <style>
+    body { font-family: Arial, sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; }
+    h1 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    td { padding: 10px; border: 1px solid #ddd; }
+    td:first-child { font-weight: 600; width: 180px; background: #f9fafb; }
+    a { color: #007bff; text-decoration: none; margin-right: 10px; }
+    </style>
+</head>
+
+<body>
+    <?php $user = $data['user']; ?>
+    <h1>User Details</h1>
+
+    <table>
+        <tr><td>ID</td><td><?= (int) $user['id'] ?></td></tr>
+        <tr><td>Name</td><td><?= htmlspecialchars($user['name']) ?></td></tr>
+        <tr><td>Email</td><td><?= htmlspecialchars($user['email']) ?></td></tr>
+        <tr><td>Role</td><td><?= htmlspecialchars($user['role']) ?></td></tr>
+        <tr><td>Plan</td><td><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></td></tr>
+        <tr><td>CV Uploads</td><td><?= (int) $user['cv_uploads_count'] ?><?= $user['max_cv_uploads'] !== null ? ' / ' . (int) $user['max_cv_uploads'] : ' / unlimited' ?></td></tr>
+        <tr><td>Emails Generated</td><td><?= (int) $user['emails_generated_count'] ?><?= $user['max_emails'] !== null ? ' / ' . (int) $user['max_emails'] : ' / unlimited' ?></td></tr>
+        <tr><td>Joined</td><td><?= htmlspecialchars($user['created_at']) ?></td></tr>
+    </table>
+
+    <p style="margin-top:20px;">
+        <a href="/user/edit/<?= (int) $user['id'] ?>">Edit</a>
+        <a href="/user">&larr; Back to Users</a>
+    </p>
+</body>
+
 </html>

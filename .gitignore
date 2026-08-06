@@ -1,0 +1,7 @@
+# Uploaded CV files should live on the server only, not in git history
+htdocs/uploads/cv/*
+!htdocs/uploads/cv/.gitkeep
+
+# OS / editor noise
+.DS_Store
+Thumbs.db

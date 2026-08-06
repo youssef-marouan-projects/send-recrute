@@ -1,7 +1,14 @@
 <?php
 
+// Admin-only user management panel.
+// Public registration lives in AuthController (/auth/register).
 class UserController extends Controller
 {
+    public function __construct()
+    {
+        $this->requireAdmin();
+    }
+
     // List all users
     // URL: /user  or  /user/index
     public function index()
@@ -42,34 +49,41 @@ class UserController extends Controller
     // URL: /user/create
     public function create()
     {
+        $planModel = $this->model('Plan');
+
         $this->view('users/create', [
-            'title' => 'Create User'
+            'title' => 'Create User',
+            'plans' => $planModel->getAll()
         ]);
     }
 
-    // Save new user (POST)
+    // Save new user (POST) — admin creating a user, role/plan selectable
     // URL: /user/store
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /user/create');
-            exit;
+            $this->redirect('/user/create');
         }
 
         $name     = trim($_POST['name'] ?? '');
         $email    = trim($_POST['email'] ?? '');
         $password = $_POST['password'] ?? '';
+        $role     = $_POST['role'] ?? 'user';
+        $planId   = (int) ($_POST['plan_id'] ?? 1);
 
         if (empty($name) || empty($email) || empty($password)) {
             echo "All fields are required";
             return;
         }
 
-        $userModel = $this->model('User');
-        $userModel->create($name, $email, $password);
+        if (!in_array($role, ['admin', 'user'], true)) {
+            $role = 'user';
+        }
 
-        header('Location: /user');
-        exit;
+        $userModel = $this->model('User');
+        $userModel->create($name, $email, $password, $role, $planId);
+
+        $this->redirect('/user');
     }
 
     // Show edit form
@@ -82,6 +96,7 @@ class UserController extends Controller
         }
 
         $userModel = $this->model('User');
+        $planModel = $this->model('Plan');
         $user = $userModel->find($id);
 
         if (!$user) {
@@ -91,27 +106,30 @@ class UserController extends Controller
 
         $this->view('users/edit', [
             'title' => 'Edit User',
-            'user'  => $user
+            'user'  => $user,
+            'plans' => $planModel->getAll()
         ]);
     }
 
-    // Update user (POST)
+    // Update user (POST) — profile, role, plan
     // URL: /user/update/5
     public function update($id = null)
     {
         if (!$id || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('Location: /user');
-            exit;
+            $this->redirect('/user');
         }
 
-        $name  = trim($_POST['name'] ?? '');
-        $email = trim($_POST['email'] ?? '');
+        $name   = trim($_POST['name'] ?? '');
+        $email  = trim($_POST['email'] ?? '');
+        $role   = $_POST['role'] ?? 'user';
+        $planId = (int) ($_POST['plan_id'] ?? 1);
 
         $userModel = $this->model('User');
         $userModel->update($id, $name, $email);
+        $userModel->updateRole($id, $role);
+        $userModel->updatePlan($id, $planId);
 
-        header('Location: /user/show/' . $id);
-        exit;
+        $this->redirect('/user/show/' . $id);
     }
 
     // Delete user
@@ -126,7 +144,6 @@ class UserController extends Controller
         $userModel = $this->model('User');
         $userModel->delete($id);
 
-        header('Location: /user');
-        exit;
+        $this->redirect('/user');
     }
 }
