@@ -32,6 +32,8 @@ ON DUPLICATE KEY UPDATE
     max_cv_uploads = VALUES(max_cv_uploads),
     max_emails = VALUES(max_emails),
     price = VALUES(price);
+-- Admins bypass all plan limits by role (checked in code), regardless of
+-- which of the 3 plans above is on their account — no separate admin tier.
 
 -- ------------------------------------------------------------
 -- users: role defaults to 'user', plan defaults to Free (id 1)

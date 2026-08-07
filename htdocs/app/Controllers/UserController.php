@@ -146,4 +146,28 @@ class UserController extends Controller
 
         $this->redirect('/user');
     }
+
+    // Admin view: every CV uploaded by every user
+    // URL: /user/cvs
+    public function cvs()
+    {
+        $cvModel = $this->model('CvUpload');
+
+        $this->view('users/cvs', [
+            'title' => 'All Uploaded CVs',
+            'cvs'   => $cvModel->getAll()
+        ]);
+    }
+
+    // Admin view: every AI-generated email from every user
+    // URL: /user/emails
+    public function emails()
+    {
+        $emailModel = $this->model('EmailGeneration');
+
+        $this->view('users/emails', [
+            'title'  => 'All Generated Emails',
+            'emails' => $emailModel->getAll()
+        ]);
+    }
 }

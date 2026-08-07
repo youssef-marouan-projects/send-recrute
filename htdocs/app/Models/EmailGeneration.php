@@ -27,4 +27,16 @@ class EmailGeneration
         $stmt->execute([$userId]);
         return $stmt->fetchAll();
     }
+
+    // Admin-only: every generated email from every user, newest first
+    public function getAll()
+    {
+        $stmt = $this->db->query(
+            "SELECT e.*, u.name AS user_name, u.email AS user_email
+             FROM email_generations e
+             JOIN users u ON u.id = e.user_id
+             ORDER BY e.id DESC"
+        );
+        return $stmt->fetchAll();
+    }
 }

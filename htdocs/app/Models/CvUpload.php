@@ -34,4 +34,16 @@ class CvUpload
         $stmt->execute([$id]);
         return $stmt->fetch();
     }
+
+    // Admin-only: every CV uploaded by every user, newest first
+    public function getAll()
+    {
+        $stmt = $this->db->query(
+            "SELECT c.*, u.name AS user_name, u.email AS user_email
+             FROM cv_uploads c
+             JOIN users u ON u.id = c.user_id
+             ORDER BY c.id DESC"
+        );
+        return $stmt->fetchAll();
+    }
 }

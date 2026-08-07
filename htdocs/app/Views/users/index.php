@@ -22,7 +22,13 @@
 
 <body>
     <h1>All Users</h1>
-    <p><a href="/user/create" class="btn">+ Add New User</a></p>
+    <p>
+        <a href="/user/create" class="btn">+ Add New User</a>
+        &nbsp;&nbsp;
+        <a href="/user/cvs">View All Uploaded CVs</a>
+        &nbsp;&middot;&nbsp;
+        <a href="/user/emails">View All Generated Emails</a>
+    </p>
 
     <table>
         <tr>

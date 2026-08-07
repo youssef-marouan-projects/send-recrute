@@ -176,9 +176,10 @@
                 Hi, <strong><?= htmlspecialchars($user['name']) ?></strong>
                 <span class="plan-badge"><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></span>
                 &nbsp;&middot;&nbsp;
-                CVs: <?= (int) $user['cv_uploads_count'] ?><?= $user['max_cv_uploads'] !== null ? ' / ' . (int) $user['max_cv_uploads'] : ' / unlimited' ?>
+                <?php $isAdmin = ($user['role'] ?? '') === 'admin'; ?>
+                CVs: <?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?>
                 &nbsp;&middot;&nbsp;
-                Emails: <?= (int) $user['emails_generated_count'] ?><?= $user['max_emails'] !== null ? ' / ' . (int) $user['max_emails'] : ' / unlimited' ?>
+                Emails: <?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
             </div>
             <div>
                 <?php if (($user['role'] ?? '') === 'admin'): ?>

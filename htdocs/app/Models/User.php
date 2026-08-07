@@ -60,12 +60,15 @@ class User
         return $stmt->execute([$name, $email, $id]);
     }
 
-    // Admin-only: change a user's role
+    // Admin-only: change a user's role.
+    // Admins bypass all plan limits by role (see canUploadCv/canGenerateEmail
+    // below) — promoting someone to admin does NOT touch their plan_id.
     public function updateRole($id, $role)
     {
         if (!in_array($role, ['admin', 'user'], true)) {
             return false;
         }
+
         $stmt = $this->db->prepare("UPDATE users SET role = ? WHERE id = ?");
         return $stmt->execute([$role, $id]);
     }
@@ -106,20 +109,24 @@ class User
 
     // ---- Usage / plan-limit helpers ----------------------------------
 
-    // true if this user is still under their plan's CV upload limit
+    // true if this user is still under their plan's CV upload limit.
+    // Admins always bypass limits, regardless of their plan.
     public function canUploadCv($id)
     {
         $user = $this->find($id);
         if (!$user) return false;
+        if ($user['role'] === 'admin') return true;
         if ($user['max_cv_uploads'] === null) return true; // unlimited (pro)
         return (int) $user['cv_uploads_count'] < (int) $user['max_cv_uploads'];
     }
 
-    // true if this user is still under their plan's email generation limit
+    // true if this user is still under their plan's email generation limit.
+    // Admins always bypass limits, regardless of their plan.
     public function canGenerateEmail($id)
     {
         $user = $this->find($id);
         if (!$user) return false;
+        if ($user['role'] === 'admin') return true;
         if ($user['max_emails'] === null) return true; // unlimited (pro)
         return (int) $user['emails_generated_count'] < (int) $user['max_emails'];
     }

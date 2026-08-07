@@ -23,8 +23,9 @@
         <tr><td>Email</td><td><?= htmlspecialchars($user['email']) ?></td></tr>
         <tr><td>Role</td><td><?= htmlspecialchars($user['role']) ?></td></tr>
         <tr><td>Plan</td><td><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></td></tr>
-        <tr><td>CV Uploads</td><td><?= (int) $user['cv_uploads_count'] ?><?= $user['max_cv_uploads'] !== null ? ' / ' . (int) $user['max_cv_uploads'] : ' / unlimited' ?></td></tr>
-        <tr><td>Emails Generated</td><td><?= (int) $user['emails_generated_count'] ?><?= $user['max_emails'] !== null ? ' / ' . (int) $user['max_emails'] : ' / unlimited' ?></td></tr>
+        <?php $isAdmin = ($user['role'] ?? '') === 'admin'; ?>
+        <tr><td>CV Uploads</td><td><?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?></td></tr>
+        <tr><td>Emails Generated</td><td><?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?></td></tr>
         <tr><td>Joined</td><td><?= htmlspecialchars($user['created_at']) ?></td></tr>
     </table>
 
