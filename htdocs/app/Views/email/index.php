@@ -164,6 +164,97 @@
         text-transform: uppercase;
         margin-left: 6px;
     }
+
+    .cv-source-toggle {
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .cv-source-toggle label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-weight: 500;
+        margin: 0;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .cv-source-toggle input[type="radio"] {
+        width: auto;
+    }
+
+    .cv-list {
+        margin-top: 10px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        max-height: 220px;
+        overflow-y: auto;
+    }
+
+    .cv-list-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px 14px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .cv-list-item:last-child {
+        border-bottom: none;
+    }
+
+    .cv-list-item label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0;
+        font-weight: 500;
+        cursor: pointer;
+        flex: 1;
+        min-width: 0;
+    }
+
+    .cv-list-item input[type="radio"] {
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    .cv-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .cv-date {
+        font-size: 12px;
+        color: #94a3b8;
+        flex-shrink: 0;
+    }
+
+    .cv-view-link {
+        color: #2563eb;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        flex-shrink: 0;
+    }
+
+    .cv-view-link:hover {
+        text-decoration: underline;
+    }
+
+    .cv-empty {
+        padding: 14px;
+        color: #94a3b8;
+        font-size: 14px;
+        text-align: center;
+    }
     </style>
 </head>
 
@@ -222,10 +313,47 @@
                 </div>
             </div>
 
-            <label>Upload CV (PDF or DOCX)</label>
-            <input type="file" name="cv_file" accept=".pdf,.docx" required>
-            <div class="note">Recommended: DOCX works best. PDF needs the pdfparser folder.</div>
-
+            <label>CV Source</label>
+            <div class="cv-source-toggle">
+                <label>
+                    <input type="radio" name="cv_source" value="new" id="cvSourceNew" checked>
+                    Upload a new CV
+                </label>
+                <label>
+                    <input type="radio" name="cv_source" value="existing" id="cvSourceExisting">
+                    Use a previously uploaded CV
+                </label>
+            </div>
+
+            <div id="newCvSection">
+                <label>Upload CV (PDF or DOCX)</label>
+                <input type="file" name="cv_file" id="cvFileInput" accept=".pdf,.docx">
+                <div class="note">Recommended: DOCX works best. PDF needs the pdfparser folder.</div>
+            </div>
+
+            <div id="existingCvSection" style="display:none;">
+                <label>Choose a CV you already uploaded</label>
+                <?php $myCvs = $data['myCvs'] ?? []; ?>
+                <?php if (empty($myCvs)): ?>
+                <div class="cv-list">
+                    <div class="cv-empty">You haven't uploaded any CV yet.</div>
+                </div>
+                <?php else: ?>
+                <div class="cv-list">
+                    <?php foreach ($myCvs as $i => $cv): ?>
+                    <div class="cv-list-item">
+                        <label>
+                            <input type="radio" name="existing_cv_id" value="<?= (int) $cv['id'] ?>" <?= $i === 0 ? 'checked' : '' ?>>
+                            <span class="cv-name"><?= htmlspecialchars($cv['original_name']) ?></span>
+                        </label>
+                        <span class="cv-date"><?= htmlspecialchars(substr($cv['created_at'], 0, 10)) ?></span>
+                        <a class="cv-view-link" href="/email/viewCv/<?= (int) $cv['id'] ?>" target="_blank" rel="noopener">View</a>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
+
             <label>Job Post / Job Description</label>
             <textarea name="job_post" required
                 placeholder="Paste the full job description here..."><?= htmlspecialchars($data['job_post'] ?? '') ?></textarea>
@@ -242,11 +370,36 @@
         <?php endif; ?>
     </div>
 
-    <script>
-    function copyResult() {
-        const text = document.getElementById('emailResult').innerText;
-        navigator.clipboard.writeText(text).then(() => alert('Email copied!'));
-    }
+    <script>
+    function copyResult() {
+        const text = document.getElementById('emailResult').innerText;
+        navigator.clipboard.writeText(text).then(() => alert('Email copied!'));
+    }
+
+    // Toggle between "upload new CV" and "use an existing CV"
+    const newRadio      = document.getElementById('cvSourceNew');
+    const existingRadio = document.getElementById('cvSourceExisting');
+    const newSection    = document.getElementById('newCvSection');
+    const existingSection = document.getElementById('existingCvSection');
+    const cvFileInput   = document.getElementById('cvFileInput');
+
+    function updateCvSource() {
+        if (existingRadio.checked) {
+            newSection.style.display = 'none';
+            existingSection.style.display = 'block';
+            cvFileInput.required = false;
+        } else {
+            newSection.style.display = 'block';
+            existingSection.style.display = 'none';
+            cvFileInput.required = true;
+        }
+    }
+
+    if (newRadio && existingRadio) {
+        newRadio.addEventListener('change', updateCvSource);
+        existingRadio.addEventListener('change', updateCvSource);
+        updateCvSource();
+    }
     </script>
 </body>
 

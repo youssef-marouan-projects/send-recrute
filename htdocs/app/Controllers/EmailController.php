@@ -6,32 +6,61 @@ class EmailController extends Controller
     {
         $this->requireLogin();
 
-        $userModel = $this->model('User');
-        $userId    = Auth::id();
-        $user      = $userModel->find($userId);
+        $userModel     = $this->model('User');
+        $cvUploadModel = $this->model('CvUpload');
+        $userId        = Auth::id();
+        $user          = $userModel->find($userId);
 
         $result = '';
         $error  = '';
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Enforce plan limits BEFORE touching the file system or the AI API
-            if (!$userModel->canUploadCv($userId)) {
-                $error = 'You have reached your plan\'s CV upload limit. Please upgrade your plan.';
-            } elseif (!$userModel->canGenerateEmail($userId)) {
-                $error = 'You have reached your plan\'s email generation limit. Please upgrade your plan.';
-            }
-
             $name     = trim($_POST['candidate_name'] ?? 'Candidate');
             $job      = trim($_POST['job_post'] ?? '');
             $language = $_POST['language'] ?? 'English';
+            $cvSource = $_POST['cv_source'] ?? 'new'; // 'new' or 'existing'
             $cvText   = '';
             $cvUploadId = null;
 
-            // Load helper
             require_once __DIR__ . '/../Helpers/CvHelper.php';
 
-            if (empty($error)) {
-                if (isset($_FILES['cv_file']) && $_FILES['cv_file']['error'] === UPLOAD_ERR_OK) {
+            if ($cvSource === 'existing') {
+                // ---- Reusing a previously uploaded CV: no new file, no upload-limit hit ----
+                if (!$userModel->canGenerateEmail($userId)) {
+                    $error = 'You have reached your plan\'s email generation limit. Please upgrade your plan.';
+                } else {
+                    $existingId = (int) ($_POST['existing_cv_id'] ?? 0);
+                    $cv = $cvUploadModel->find($existingId);
+
+                    if (!$cv || (int) $cv['user_id'] !== $userId) {
+                        $error = 'Please choose a valid CV from your uploads.';
+                    } else {
+                        $filePath = __DIR__ . '/../../' . $cv['path'];
+                        if (!file_exists($filePath)) {
+                            $error = 'That CV file could not be found on the server anymore. Please upload it again.';
+                        } else {
+                            $cvUploadId = $cv['id'];
+                            if ($cv['extension'] === 'docx') {
+                                $cvText = CvHelper::extractTextFromDocx($filePath);
+                                if ($cvText === false) {
+                                    $error = 'Could not read the saved DOCX file.';
+                                }
+                            } else {
+                                $cvText = CvHelper::extractTextFromPdf($filePath);
+                                if ($cvText === false) {
+                                    $error = 'Could not read the saved PDF file.';
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                // ---- Uploading a brand new CV: enforce both limits ----
+                if (!$userModel->canUploadCv($userId)) {
+                    $error = 'You have reached your plan\'s CV upload limit. Please upgrade your plan.';
+                } elseif (!$userModel->canGenerateEmail($userId)) {
+                    $error = 'You have reached your plan\'s email generation limit. Please upgrade your plan.';
+                } elseif (isset($_FILES['cv_file']) && $_FILES['cv_file']['error'] === UPLOAD_ERR_OK) {
                     $file = $_FILES['cv_file'];
                     $ext  = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
                     $tmp  = $file['tmp_name'];
@@ -39,7 +68,6 @@ class EmailController extends Controller
                     if (!in_array($ext, ['pdf', 'docx'], true)) {
                         $error = 'Only PDF and DOCX files are allowed.';
                     } else {
-                        // Save the uploaded CV to disk under uploads/cv/{user_id}/
                         $uploadDir = __DIR__ . '/../../uploads/cv/' . $userId . '/';
                         if (!is_dir($uploadDir)) {
                             mkdir($uploadDir, 0755, true);
@@ -51,10 +79,8 @@ class EmailController extends Controller
                         if (!move_uploaded_file($tmp, $destPath)) {
                             $error = 'Could not save the uploaded file.';
                         } else {
-                            // Relative path stored in DB (relative to htdocs/)
                             $relativePath = 'uploads/cv/' . $userId . '/' . $storedName;
 
-                            $cvUploadModel = $this->model('CvUpload');
                             $cvUploadId = $cvUploadModel->create(
                                 $userId,
                                 $file['name'],
@@ -65,7 +91,6 @@ class EmailController extends Controller
                             );
                             $userModel->incrementCvUploads($userId);
 
-                            // Extract text from the file we just saved on disk
                             if ($ext === 'docx') {
                                 $cvText = CvHelper::extractTextFromDocx($destPath);
                                 if ($cvText === false) {
@@ -120,7 +145,6 @@ Rules:
 
                 $result = CvHelper::callGroq($prompt);
 
-                // Log the generation and bump the usage counter
                 $emailGenModel = $this->model('EmailGeneration');
                 $emailGenModel->create($userId, $cvUploadId, $job, $language, $result);
                 $userModel->incrementEmailsGenerated($userId);
@@ -131,10 +155,50 @@ Rules:
         }
 
         $this->view('email/index', [
-            'title'  => 'AI Job Email Generator',
-            'result' => $result,
-            'error'  => $error,
-            'user'   => $user
+            'title'   => 'AI Job Email Generator',
+            'result'  => $result,
+            'error'   => $error,
+            'user'    => $user,
+            'myCvs'   => $cvUploadModel->getByUser($userId)
         ]);
+    }
+
+    // Serve a previously uploaded CV for viewing/downloading — only to its owner (or an admin)
+    // URL: /email/viewCv/5
+    public function viewCv($id = null)
+    {
+        $this->requireLogin();
+
+        if (!$id) {
+            http_response_code(404);
+            echo "CV not found.";
+            return;
+        }
+
+        $cvUploadModel = $this->model('CvUpload');
+        $cv = $cvUploadModel->find($id);
+
+        if (!$cv || ((int) $cv['user_id'] !== Auth::id() && !Auth::isAdmin())) {
+            http_response_code(403);
+            echo "You don't have access to this file.";
+            return;
+        }
+
+        $filePath = __DIR__ . '/../../' . $cv['path'];
+        if (!file_exists($filePath)) {
+            http_response_code(404);
+            echo "File not found on server.";
+            return;
+        }
+
+        $mime = $cv['extension'] === 'pdf'
+            ? 'application/pdf'
+            : 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+
+        header('Content-Type: ' . $mime);
+        header('Content-Disposition: inline; filename="' . basename($cv['original_name']) . '"');
+        header('Content-Length: ' . filesize($filePath));
+        readfile($filePath);
+        exit;
     }
 }
