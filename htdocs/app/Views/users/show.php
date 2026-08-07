@@ -14,6 +14,7 @@
 </head>
 
 <body>
+    <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
     <?php $user = $data['user']; ?>
     <h1>User Details</h1>
 

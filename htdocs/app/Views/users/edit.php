@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
     <?php $user = $data['user']; ?>
     <h1><?= htmlspecialchars($data['title']) ?></h1>
 

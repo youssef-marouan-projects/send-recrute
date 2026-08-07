@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
     <h1><?= htmlspecialchars($data['title']) ?></h1>
 
     <form method="POST" action="/user/store">

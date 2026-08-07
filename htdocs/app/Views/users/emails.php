@@ -20,10 +20,7 @@
 </head>
 
 <body>
-    <div class="nav">
-        <a href="/user">&larr; All Users</a>
-        <a href="/user/cvs">All Uploaded CVs</a>
-    </div>
+    <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
 
     <h1>All Generated Emails</h1>
 
