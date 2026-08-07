@@ -67,8 +67,8 @@ class AuthController extends Controller
     }
 
     // Show login form
-    // URL: /auth/login
-    public function login()
+    // URL: /auth
+    public function index()
     {
         if (Auth::check()) {
             $this->redirect('/email');
@@ -85,7 +85,7 @@ class AuthController extends Controller
     public function authenticate()
     {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/auth/login');
+            $this->redirect('/auth');
         }
 
         $email    = trim($_POST['email'] ?? '');
@@ -115,6 +115,6 @@ class AuthController extends Controller
     public function logout()
     {
         Auth::logout();
-        $this->redirect('/auth/login');
+        $this->redirect('/auth');
     }
 }
