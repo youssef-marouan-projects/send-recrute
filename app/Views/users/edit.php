@@ -1,88 +1,60 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($data['title']) ?></title>
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 500px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    label {
-        display: block;
-        font-weight: 600;
-        margin: 14px 0 6px;
-    }
-
-    input,
-    select {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 15px;
-    }
-
-    button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #0069d9;
-    }
-
-    a {
-        color: #007bff;
-        text-decoration: none;
-    }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
+<body class="bg-slate-50 min-h-screen">
     <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
-    <?php $user = $data['user']; ?>
-    <h1><?= htmlspecialchars($data['title']) ?></h1>
 
-    <form method="POST" action="/user/update/<?= (int) $user['id'] ?>">
-        <label>Name</label>
-        <input type="text" name="name" required value="<?= htmlspecialchars($user['name']) ?>">
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+        <h1 class="text-2xl font-bold text-slate-900 mb-6"><?= htmlspecialchars($data['title']) ?></h1>
 
-        <label>Email</label>
-        <input type="email" name="email" required value="<?= htmlspecialchars($user['email']) ?>">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+            <form method="POST" action="/user/update/<?= (int) $data['user']['id'] ?>" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
+                    <input type="text" name="name" required value="<?= htmlspecialchars($data['user']['name']) ?>"
+                           class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                    <input type="email" name="email" required value="<?= htmlspecialchars($data['user']['email']) ?>"
+                           class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Role</label>
+                    <select name="role"
+                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <option value="user" <?= $data['user']['role'] === 'user' ? 'selected' : '' ?>>User</option>
+                        <option value="admin" <?= $data['user']['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Plan</label>
+                    <select name="plan_id"
+                            class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        <?php foreach (($data['plans'] ?? []) as $plan): ?>
+                        <option value="<?= (int) $plan['id'] ?>" <?= (int) $plan['id'] === (int) $data['user']['plan_id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($plan['name']) ?>
+                        </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="pt-2">
+                    <button type="submit"
+                            class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
 
-        <label>Role</label>
-        <select name="role">
-            <option value="user" <?= $user['role'] === 'user' ? 'selected' : '' ?>>User</option>
-            <option value="admin" <?= $user['role'] === 'admin' ? 'selected' : '' ?>>Admin</option>
-        </select>
-
-        <label>Plan</label>
-        <select name="plan_id">
-            <?php foreach (($data['plans'] ?? []) as $plan): ?>
-            <option value="<?= (int) $plan['id'] ?>"
-                <?= (int) $plan['id'] === (int) $user['plan_id'] ? 'selected' : '' ?>>
-                <?= htmlspecialchars($plan['name']) ?>
-            </option>
-            <?php endforeach; ?>
-        </select>
-
-        <button type="submit">Save Changes</button>
-    </form>
-
-    <p style="margin-top:20px;"><a href="/user">&larr; Back to Users</a></p>
+        <div class="mt-6">
+            <a href="/user" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">&larr; Back to Users</a>
+        </div>
+    </main>
 </body>
-
 </html>

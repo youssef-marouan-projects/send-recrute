@@ -146,4 +146,32 @@ class User
         );
         return $stmt->execute([$id]);
     }
+
+    // ---- Profile / mass-send identity ---------------------------------
+
+    // Updates the display name shown as "From" and the Gmail address used
+    // to authenticate with Gmail SMTP. Does NOT touch the login password.
+    public function updateSenderIdentity($id, $senderName, $senderEmail)
+    {
+        $stmt = $this->db->prepare(
+            "UPDATE users SET sender_name = ?, sender_email = ? WHERE id = ?"
+        );
+        return $stmt->execute([$senderName, $senderEmail, $id]);
+    }
+
+    // Stores the Gmail App Password encrypted (see CryptoHelper). Pass an
+    // empty string to clear it.
+    public function updateGmailAppPassword($id, $encryptedAppPassword)
+    {
+        $stmt = $this->db->prepare("UPDATE users SET gmail_app_password = ? WHERE id = ?");
+        return $stmt->execute([$encryptedAppPassword ?: null, $id]);
+    }
+
+    // true once the user has configured everything needed to send real
+    // mail: a sender email + an app password.
+    public function hasMailSendingConfigured($id)
+    {
+        $user = $this->find($id);
+        return $user && !empty($user['sender_email']) && !empty($user['gmail_app_password']);
+    }
 }
