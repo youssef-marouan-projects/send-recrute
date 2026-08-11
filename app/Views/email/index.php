@@ -399,6 +399,9 @@
                 <?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
             </div>
             <div>
+                <a href="/campaign">Mass Send</a> &nbsp;&middot;&nbsp;
+                <a href="/signature">Signatures</a> &nbsp;&middot;&nbsp;
+                <a href="/profile">Profile</a> &nbsp;&middot;&nbsp;
                 <?php if (($user['role'] ?? '') === 'admin'): ?>
                 <a href="/user">Admin Panel</a> &nbsp;&middot;&nbsp;
                 <?php endif; ?>

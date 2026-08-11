@@ -9,3 +9,7 @@ define("DB_NAME", 'db');
 // Groq API
 define('GROQ_API_KEY', 'grok-key');
 define('GROQ_MODEL', 'llama-3.3-70b-versatile');
+
+// Used to encrypt Gmail App Passwords at rest (Profile > Mail Sending).
+// Generate a real random one, e.g.: php -r "echo bin2hex(random_bytes(32));"
+define('APP_ENCRYPTION_KEY', 'change-me-to-a-random-64-char-hex-string');
