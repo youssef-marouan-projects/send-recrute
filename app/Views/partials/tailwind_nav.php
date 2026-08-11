@@ -1,7 +1,7 @@
 <?php
-// Shared top nav for the Tailwind-styled pages (Campaign, Signatures, Profile).
+// Shared top nav for the Tailwind-styled pages.
 // Include with: require __DIR__ . '/../partials/tailwind_nav.php';
-// Expects $activeNav to be set to one of: 'campaign' | 'signature' | 'profile' | 'email'
+// Expects $activeNav to be set to one of: 'email' | 'campaign' | 'signature' | 'profile' | 'users' | 'cvs' | 'emails'
 $navLink = function ($href, $label, $key) use (&$activeNav) {
     $isActive = ($activeNav ?? '') === $key;
     $classes = $isActive
@@ -11,9 +11,10 @@ $navLink = function ($href, $label, $key) use (&$activeNav) {
 };
 ?>
 <header class="bg-white border-b border-slate-200 sticky top-0 z-20">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-2">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3 flex items-cnter justify-between flex-wrap gap-2">
         <a href="/email" class="flex items-center gap-2 font-semibold text-slate-800">
-            <span class="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white text-sm">SR</span>
+            <span class="inline-flex h-8 w-8 items-center justify-center"><img src="/assets/logo.png" alt="send-recrute"
+                    class="h-8 w-8 object-contain"></span>
             <span>send-recrute</span>
         </a>
         <nav class="flex items-center gap-1 flex-wrap">
@@ -21,7 +22,13 @@ $navLink = function ($href, $label, $key) use (&$activeNav) {
             <?php $navLink('/campaign', 'Mass Send', 'campaign'); ?>
             <?php $navLink('/signature', 'Signatures', 'signature'); ?>
             <?php $navLink('/profile', 'Profile', 'profile'); ?>
-            <a href="/auth/logout" class="px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 transition">Log Out</a>
+            <?php if (Auth::isAdmin()): ?>
+            <?php $navLink('/user', 'Users', 'users'); ?>
+            <?php $navLink('/user/cvs', 'CVs', 'cvs'); ?>
+            <?php $navLink('/user/emails', 'Emails', 'emails'); ?>
+            <?php endif; ?>
+            <a href="/auth/logout"
+                class="px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 transition">Log Out</a>
         </nav>
     </div>
 </header>

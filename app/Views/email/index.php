@@ -7,32 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
-    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
-        <?php $user = $data['user'] ?? null; ?>
-        <?php if ($user): ?>
-        <div class="flex items-center justify-between flex-wrap gap-3 bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 text-sm">
-            <div>
-                Hi, <strong><?= htmlspecialchars($user['name']) ?></strong>
-                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase bg-indigo-600 text-white ml-1"><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></span>
-                <span class="text-slate-400 mx-2">&middot;</span>
-                <?php $isAdmin = ($user['role'] ?? '') === 'admin'; ?>
-                CVs: <?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?>
-                <span class="text-slate-400 mx-2">&middot;</span>
-                Emails: <?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
-            </div>
-            <div class="flex items-center gap-3 flex-wrap">
-                <a href="/campaign" class="text-indigo-600 hover:underline font-medium">Mass Send</a>
-                <a href="/signature" class="text-indigo-600 hover:underline font-medium">Signatures</a>
-                <a href="/profile" class="text-indigo-600 hover:underline font-medium">Profile</a>
-                <?php if (($user['role'] ?? '') === 'admin'): ?>
-                <a href="/user" class="text-indigo-600 hover:underline font-medium">Admin Panel</a>
-                <?php endif; ?>
-                <a href="/auth/logout" class="text-rose-600 hover:underline font-medium">Log Out</a>
-            </div>
-        </div>
-        <?php endif; ?>
+    <?php $activeNav = 'email'; require __DIR__ . '/../partials/tailwind_nav.php'; ?>
 
-        <h1 class="text-2xl font-bold text-slate-900">AI Job Application Email Generator</h1>
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
+
+        <h1 class="text-2xl font-bold text-slate-900 mb-6">AI Job Application Email Generator</h1>
         <p class="text-slate-500 mt-1">Upload your CV (PDF or DOCX) + Job description &rarr; Get a professional email</p>
 
         <?php if (!empty($data['error'])): ?>

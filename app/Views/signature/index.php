@@ -34,35 +34,35 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Name</label>
-                            <input name="name" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="name" required class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
-                            <input name="title" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="title" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                            <input type="email" name="email" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input type="email" name="email" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Phone</label>
-                            <input name="phone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="phone" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">LinkedIn</label>
-                            <input name="linkedin" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="linkedin" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">GitHub</label>
-                            <input name="github" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="github" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="col-span-2">
                             <label class="block text-sm font-medium text-slate-700 mb-1">Portfolio</label>
-                            <input name="portfolio" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                            <input name="portfolio" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="col-span-2">
                             <label class="block text-sm font-medium text-slate-700 mb-1">Custom text</label>
-                            <textarea name="custom_text" rows="2" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            <textarea name="custom_text" rows="2" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"></textarea>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Photo</label>
@@ -70,7 +70,7 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Image shape</label>
-                            <select name="image_shape" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                            <select name="image_shape" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="circle">Circle</option>
                                 <option value="rounded">Rounded</option>
                                 <option value="square">Square</option>
@@ -78,14 +78,14 @@
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Layout</label>
-                            <select name="layout" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">
+                            <select name="layout" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                                 <option value="horizontal">Horizontal</option>
                                 <option value="vertical">Vertical</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Accent color</label>
-                            <input type="color" name="accent_color" value="#3b82f6" class="w-full h-10 rounded-lg border border-slate-300">
+                            <input type="color" name="accent_color" value="#3b82f6" class="w-full h-10 rounded-lg border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         </div>
                         <div class="flex items-end">
                             <label class="inline-flex items-center gap-2 text-sm text-slate-700">

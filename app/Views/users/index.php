@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-slate-50 min-h-screen">
-    <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
+    <?php $activeNav = 'users'; require __DIR__ . '/../partials/tailwind_nav.php'; ?>
 
     <main class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <div class="flex items-center justify-between flex-wrap gap-3 mb-6">

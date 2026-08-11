@@ -36,12 +36,12 @@
                 <button type="submit" class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition">
                     Load Excel
                 </button>
-                <?php if (!empty($rows)): ?>
-                <form method="POST" action="/campaign/clear" class="ml-auto">
-                    <button type="submit" class="text-sm font-medium text-slate-500 hover:text-rose-600">Clear all</button>
-                </form>
-                <?php endif; ?>
             </form>
+            <?php if (!empty($rows)): ?>
+            <form method="POST" action="/campaign/clear" class="mt-3">
+                <button type="submit" class="text-sm font-medium text-slate-500 hover:text-rose-600">Clear all</button>
+            </form>
+            <?php endif; ?>
         </section>
 
         <?php if (!empty($rows)): ?>
