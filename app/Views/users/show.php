@@ -1,92 +1,61 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($data['title']) ?></title>
-    <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 500px;
-        margin: 40px auto;
-        padding: 20px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 16px;
-    }
-
-    td {
-        padding: 10px;
-        border: 1px solid #ddd;
-    }
-
-    td:first-child {
-        font-weight: 600;
-        width: 180px;
-        background: #f9fafb;
-    }
-
-    a {
-        color: #007bff;
-        text-decoration: none;
-        margin-right: 10px;
-    }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
+<body class="bg-slate-50 min-h-screen">
     <?php require __DIR__ . '/../partials/admin_nav.php'; ?>
-    <?php $user = $data['user']; ?>
-    <h1>User Details</h1>
 
-    <table>
-        <tr>
-            <td>ID</td>
-            <td><?= (int) $user['id'] ?></td>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td><?= htmlspecialchars($user['name']) ?></td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td><?= htmlspecialchars($user['email']) ?></td>
-        </tr>
-        <tr>
-            <td>Role</td>
-            <td><?= htmlspecialchars($user['role']) ?></td>
-        </tr>
-        <tr>
-            <td>Plan</td>
-            <td><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></td>
-        </tr>
-        <?php $isAdmin = ($user['role'] ?? '') === 'admin'; ?>
-        <tr>
-            <td>CV Uploads</td>
-            <td><?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Emails Generated</td>
-            <td><?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
-            </td>
-        </tr>
-        <tr>
-            <td>Joined</td>
-            <td><?= htmlspecialchars($user['created_at']) ?></td>
-        </tr>
-    </table>
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 py-10">
+        <h1 class="text-2xl font-bold text-slate-900 mb-6">User Details</h1>
 
-    <p style="margin-top:20px;">
-        <a href="/user/edit/<?= (int) $user['id'] ?>">Edit</a>
-        <a href="/user">&larr; Back to Users</a>
-    </p>
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <table class="min-w-full text-sm">
+                <tbody class="divide-y divide-slate-100">
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50 w-40">ID</td>
+                        <td class="px-4 py-3 text-slate-900"><?= (int) $data['user']['id'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Name</td>
+                        <td class="px-4 py-3 text-slate-900"><?= htmlspecialchars($data['user']['name']) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Email</td>
+                        <td class="px-4 py-3 text-slate-900"><?= htmlspecialchars($data['user']['email']) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Role</td>
+                        <td class="px-4 py-3 text-slate-900"><?= htmlspecialchars($data['user']['role']) ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Plan</td>
+                        <td class="px-4 py-3 text-slate-900"><?= htmlspecialchars($data['user']['plan_name'] ?? 'Free') ?></td>
+                    </tr>
+                    <?php $isAdmin = ($data['user']['role'] ?? '') === 'admin'; ?>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">CV Uploads</td>
+                        <td class="px-4 py-3 text-slate-900"><?= (int) $data['user']['cv_uploads_count'] ?><?= $isAdmin || $data['user']['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $data['user']['max_cv_uploads'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Emails Generated</td>
+                        <td class="px-4 py-3 text-slate-900"><?= (int) $data['user']['emails_generated_count'] ?><?= $isAdmin || $data['user']['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $data['user']['max_emails'] ?></td>
+                    </tr>
+                    <tr>
+                        <td class="px-4 py-3 font-semibold text-slate-700 bg-slate-50">Joined</td>
+                        <td class="px-4 py-3 text-slate-900"><?= htmlspecialchars($data['user']['created_at']) ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 flex items-center gap-3">
+            <a href="/user/edit/<?= (int) $data['user']['id'] ?>" class="inline-flex items-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition">Edit User</a>
+            <a href="/user" class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 transition">&larr; Back to Users</a>
+        </div>
+    </main>
 </body>
-
 </html>

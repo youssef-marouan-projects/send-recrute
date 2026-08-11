@@ -1,546 +1,161 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
-
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>AI Job Email Generator – Upload CV</title>
-
-    <style>
-    * {
-
-        box-sizing: border-box;
-
-    }
-
-
-
-    body {
-
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-
-        background: #f1f5f9;
-
-        margin: 0;
-
-        padding: 20px;
-
-        color: #1e293b;
-
-    }
-
-
-
-    .container {
-
-        max-width: 860px;
-
-        margin: 0 auto;
-
-        background: white;
-
-        border-radius: 16px;
-
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-
-        padding: 32px;
-
-    }
-
-
-
-    h1 {
-
-        margin: 0 0 8px;
-
-        font-size: 1.8rem;
-
-    }
-
-
-
-    .subtitle {
-
-        color: #64748b;
-
-        margin-bottom: 28px;
-
-    }
-
-
-
-    label {
-
-        display: block;
-
-        font-weight: 600;
-
-        margin: 18px 0 6px;
-
-    }
-
-
-
-    input[type="text"],
-
-    select,
-
-    textarea,
-
-    input[type="file"] {
-
-        width: 100%;
-
-        padding: 12px 14px;
-
-        border: 1px solid #cbd5e1;
-
-        border-radius: 8px;
-
-        font-size: 15px;
-
-    }
-
-
-
-    textarea {
-
-        min-height: 140px;
-
-        resize: vertical;
-
-    }
-
-
-
-    .row {
-
-        display: flex;
-
-        gap: 16px;
-
-    }
-
-
-
-    .row>div {
-
-        flex: 1;
-
-    }
-
-
-
-    button {
-
-        background: #2563eb;
-
-        color: white;
-
-        border: none;
-
-        padding: 14px 28px;
-
-        font-size: 16px;
-
-        font-weight: 600;
-
-        border-radius: 8px;
-
-        cursor: pointer;
-
-        margin-top: 24px;
-
-        width: 100%;
-
-    }
-
-
-
-    button:hover {
-
-        background: #1d4ed8;
-
-    }
-
-
-
-    .error {
-
-        background: #fef2f2;
-
-        color: #b91c1c;
-
-        padding: 12px 16px;
-
-        border-radius: 8px;
-
-        margin-bottom: 20px;
-
-        border: 1px solid #fecaca;
-
-    }
-
-
-
-    .result-box {
-
-        margin-top: 32px;
-
-        background: #f0fdf4;
-
-        border: 1px solid #86efac;
-
-        border-radius: 12px;
-
-        padding: 24px;
-
-    }
-
-
-
-    .result-content {
-
-        white-space: pre-wrap;
-
-        line-height: 1.6;
-
-        background: white;
-
-        padding: 18px;
-
-        border-radius: 8px;
-
-        border: 1px solid #bbf7d0;
-
-    }
-
-
-
-    .copy-btn {
-
-        background: #16a34a;
-
-        margin-top: 12px;
-
-        width: auto;
-
-        padding: 10px 20px;
-
-        font-size: 14px;
-
-    }
-
-
-
-    .copy-btn:hover {
-
-        background: #15803d;
-
-    }
-
-
-
-    .note {
-        font-size: 13px;
-        color: #64748b;
-        margin-top: 6px;
-    }
-
-    .account-bar {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        background: #eff6ff;
-        border: 1px solid #bfdbfe;
-        border-radius: 10px;
-        padding: 12px 16px;
-        margin-bottom: 24px;
-        font-size: 14px;
-    }
-
-    .account-bar a {
-        color: #2563eb;
-        text-decoration: none;
-        font-weight: 600;
-    }
-
-    .account-bar a:hover {
-        text-decoration: underline;
-    }
-
-    .plan-badge {
-        display: inline-block;
-        background: #2563eb;
-        color: white;
-        padding: 2px 10px;
-        border-radius: 999px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-left: 6px;
-    }
-
-    .cv-source-toggle {
-        display: flex;
-        gap: 12px;
-        margin-top: 8px;
-    }
-
-    .cv-source-toggle label {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-weight: 500;
-        margin: 0;
-        padding: 10px 14px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        cursor: pointer;
-        flex: 1;
-    }
-
-    .cv-source-toggle input[type="radio"] {
-        width: auto;
-    }
-
-    .cv-list {
-        margin-top: 10px;
-        border: 1px solid #e2e8f0;
-        border-radius: 8px;
-        max-height: 220px;
-        overflow-y: auto;
-    }
-
-    .cv-list-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 10px;
-        padding: 10px 14px;
-        border-bottom: 1px solid #e2e8f0;
-    }
-
-    .cv-list-item:last-child {
-        border-bottom: none;
-    }
-
-    .cv-list-item label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin: 0;
-        font-weight: 500;
-        cursor: pointer;
-        flex: 1;
-        min-width: 0;
-    }
-
-    .cv-list-item input[type="radio"] {
-        width: auto;
-        flex-shrink: 0;
-    }
-
-    .cv-name {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-
-    .cv-date {
-        font-size: 12px;
-        color: #94a3b8;
-        flex-shrink: 0;
-    }
-
-    .cv-view-link {
-        color: #2563eb;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 600;
-        flex-shrink: 0;
-    }
-
-    .cv-view-link:hover {
-        text-decoration: underline;
-    }
-
-    .cv-empty {
-        padding: 14px;
-        color: #94a3b8;
-        font-size: 14px;
-        text-align: center;
-    }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
-    <div class="container">
+<body class="bg-slate-50 min-h-screen">
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-10">
         <?php $user = $data['user'] ?? null; ?>
         <?php if ($user): ?>
-        <div class="account-bar">
+        <div class="flex items-center justify-between flex-wrap gap-3 bg-indigo-50 border border-indigo-200 rounded-xl p-4 mb-6 text-sm">
             <div>
                 Hi, <strong><?= htmlspecialchars($user['name']) ?></strong>
-                <span class="plan-badge"><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></span>
-                &nbsp;&middot;&nbsp;
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase bg-indigo-600 text-white ml-1"><?= htmlspecialchars($user['plan_name'] ?? 'Free') ?></span>
+                <span class="text-slate-400 mx-2">&middot;</span>
                 <?php $isAdmin = ($user['role'] ?? '') === 'admin'; ?>
-                CVs:
-                <?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?>
-                &nbsp;&middot;&nbsp;
-                Emails:
-                <?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
+                CVs: <?= (int) $user['cv_uploads_count'] ?><?= $isAdmin || $user['max_cv_uploads'] === null ? ' / unlimited' : ' / ' . (int) $user['max_cv_uploads'] ?>
+                <span class="text-slate-400 mx-2">&middot;</span>
+                Emails: <?= (int) $user['emails_generated_count'] ?><?= $isAdmin || $user['max_emails'] === null ? ' / unlimited' : ' / ' . (int) $user['max_emails'] ?>
             </div>
-            <div>
-                <a href="/campaign">Mass Send</a> &nbsp;&middot;&nbsp;
-                <a href="/signature">Signatures</a> &nbsp;&middot;&nbsp;
-                <a href="/profile">Profile</a> &nbsp;&middot;&nbsp;
+            <div class="flex items-center gap-3 flex-wrap">
+                <a href="/campaign" class="text-indigo-600 hover:underline font-medium">Mass Send</a>
+                <a href="/signature" class="text-indigo-600 hover:underline font-medium">Signatures</a>
+                <a href="/profile" class="text-indigo-600 hover:underline font-medium">Profile</a>
                 <?php if (($user['role'] ?? '') === 'admin'): ?>
-                <a href="/user">Admin Panel</a> &nbsp;&middot;&nbsp;
+                <a href="/user" class="text-indigo-600 hover:underline font-medium">Admin Panel</a>
                 <?php endif; ?>
-                <a href="/auth/logout">Log Out</a>
+                <a href="/auth/logout" class="text-rose-600 hover:underline font-medium">Log Out</a>
             </div>
         </div>
         <?php endif; ?>
 
-        <h1>AI Job Application Email Generator</h1>
-        <p class="subtitle">Upload your CV (PDF or DOCX) + Job description &rarr; Get a professional email</p>
+        <h1 class="text-2xl font-bold text-slate-900">AI Job Application Email Generator</h1>
+        <p class="text-slate-500 mt-1">Upload your CV (PDF or DOCX) + Job description &rarr; Get a professional email</p>
 
         <?php if (!empty($data['error'])): ?>
-        <div class="error"><?= htmlspecialchars($data['error']) ?></div>
+        <div class="mt-6 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm px-4 py-3"><?= htmlspecialchars($data['error']) ?></div>
         <?php endif; ?>
 
+        <div class="mt-8 grid lg:grid-cols-2 gap-6">
+            <!-- Generator form -->
+            <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-4">New Email</h2>
+                <form method="POST" enctype="multipart/form-data" action="/email" class="space-y-4">
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Your Full Name</label>
+                            <input type="text" name="candidate_name" required
+                                   value="<?= htmlspecialchars($data['candidate_name'] ?? '') ?>"
+                                   placeholder="Marco Rossi"
+                                   class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Email Language</label>
+                            <select name="language"
+                                    class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                                <option value="English" <?= ($data['language'] ?? '') === 'English' ? 'selected' : '' ?>>English</option>
+                                <option value="Italian" <?= ($data['language'] ?? '') === 'Italian' ? 'selected' : '' ?>>Italian</option>
+                                <option value="Spanish" <?= ($data['language'] ?? '') === 'Spanish' ? 'selected' : '' ?>>Spanish</option>
+                                <option value="French" <?= ($data['language'] ?? '') === 'French' ? 'selected' : '' ?>>French</option>
+                                <option value="Portuguese" <?= ($data['language'] ?? '') === 'Portuguese' ? 'selected' : '' ?>>Portuguese</option>
+                                <option value="German" <?= ($data['language'] ?? '') === 'German' ? 'selected' : '' ?>>German</option>
+                            </select>
+                        </div>
+                    </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">CV Source</label>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <label class="inline-flex items-center gap-2 border border-slate-300 rounded-lg px-4 py-3 cursor-pointer flex-1 text-sm font-medium">
+                                <input type="radio" name="cv_source" value="new" id="cvSourceNew" checked class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                                Upload a new CV
+                            </label>
+                            <label class="inline-flex items-center gap-2 border border-slate-300 rounded-lg px-4 py-3 cursor-pointer flex-1 text-sm font-medium">
+                                <input type="radio" name="cv_source" value="existing" id="cvSourceExisting" class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500">
+                                Use a previously uploaded CV
+                            </label>
+                        </div>
+                    </div>
 
-        <form method="POST" enctype="multipart/form-data" action="/email">
+                    <div id="newCvSection">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Upload CV (PDF or DOCX)</label>
+                        <input type="file" name="cv_file" id="cvFileInput" accept=".pdf,.docx"
+                               class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-600 file:mr-3 file:rounded-lg file:border-0 file:bg-indigo-50 file:text-indigo-700 file:px-4 file:py-2 file:font-medium">
+                        <p class="text-xs text-slate-400 mt-1.5">Recommended: DOCX works best. PDF needs the pdfparser folder.</p>
+                    </div>
 
-            <div class="row">
+                    <div id="existingCvSection" class="hidden">
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Choose a CV you already uploaded</label>
+                        <?php $myCvs = $data['myCvs'] ?? []; ?>
+                        <?php if (empty($myCvs)): ?>
+                        <div class="border border-slate-200 rounded-lg py-4 text-center text-slate-400 text-sm">You haven't uploaded any CV yet.</div>
+                        <?php else: ?>
+                        <div class="border border-slate-200 rounded-lg max-h-[220px] overflow-y-auto">
+                            <?php foreach ($myCvs as $i => $cv): ?>
+                            <div class="flex items-center justify-between gap-3 p-3 border-b border-slate-100 last:border-b-0">
+                                <label class="inline-flex items-center gap-2 flex-1 min-w-0 font-medium text-sm cursor-pointer">
+                                    <input type="radio" name="existing_cv_id" value="<?= (int) $cv['id'] ?>" <?= $i === 0 ? 'checked' : '' ?> class="rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 flex-shrink-0">
+                                    <span class="truncate"><?= htmlspecialchars($cv['original_name']) ?></span>
+                                </label>
+                                <span class="text-xs text-slate-400 flex-shrink-0"><?= htmlspecialchars(substr($cv['created_at'], 0, 10)) ?></span>
+                                <a class="text-indigo-600 text-sm font-semibold hover:underline flex-shrink-0" href="/email/viewCv/<?= (int) $cv['id'] ?>" target="_blank" rel="noopener">View</a>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                    </div>
 
-                <div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Job Post / Job Description</label>
+                        <textarea name="job_post" required rows="6" placeholder="Paste the full job description here..."
+                                  class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"><?= htmlspecialchars($data['job_post'] ?? '') ?></textarea>
+                    </div>
 
-                    <label>Your Full Name</label>
+                    <button type="submit"
+                            class="w-full inline-flex justify-center items-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 transition">
+                        Generate Professional Email
+                    </button>
+                </form>
+            </section>
 
-                    <input type="text" name="candidate_name" required
-                        value="<?= htmlspecialchars($data['candidate_name'] ?? '') ?>" placeholder="Marco Rossi">
-
-                </div>
-
-                <div>
-
-                    <label>Email Language</label>
-
-                    <select name="language">
-
-                        <option value="English">English</option>
-
-                        <option value="Italian" <?= ($data['language'] ?? '') === 'Italian' ? 'selected' : '' ?>>
-
-                            Italian</option>
-
-                        <option value="Spanish" <?= ($data['language'] ?? '') === 'Spanish' ? 'selected' : '' ?>>
-
-                            Spanish</option>
-
-                        <option value="French" <?= ($data['language'] ?? '') === 'French' ? 'selected' : '' ?>>French
-
-                        </option>
-
-                        <option value="Portuguese" <?= ($data['language'] ?? '') === 'Portuguese' ? 'selected' : '' ?>>
-
-                            Portuguese</option>
-
-                        <option value="German" <?= ($data['language'] ?? '') === 'German' ? 'selected' : '' ?>>German
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-
-
-            <label>CV Source</label>
-            <div class="cv-source-toggle">
-                <label>
-                    <input type="radio" name="cv_source" value="new" id="cvSourceNew" checked>
-                    Upload a new CV
-                </label>
-                <label>
-                    <input type="radio" name="cv_source" value="existing" id="cvSourceExisting">
-                    Use a previously uploaded CV
-                </label>
-            </div>
-
-            <div id="newCvSection">
-                <label>Upload CV (PDF or DOCX)</label>
-                <input type="file" name="cv_file" id="cvFileInput" accept=".pdf,.docx">
-                <div class="note">Recommended: DOCX works best. PDF needs the pdfparser folder.</div>
-            </div>
-
-            <div id="existingCvSection" style="display:none;">
-                <label>Choose a CV you already uploaded</label>
+            <!-- Existing CVs -->
+            <section class="space-y-4">
+                <h2 class="text-lg font-semibold text-slate-900">Your CVs</h2>
                 <?php $myCvs = $data['myCvs'] ?? []; ?>
                 <?php if (empty($myCvs)): ?>
-                <div class="cv-list">
-                    <div class="cv-empty">You haven't uploaded any CV yet.</div>
-                </div>
+                    <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center text-slate-400 text-sm">
+                        No CVs uploaded yet. Upload one in the form to get started.
+                    </div>
                 <?php else: ?>
-                <div class="cv-list">
-                    <?php foreach ($myCvs as $i => $cv): ?>
-                    <div class="cv-list-item">
-                        <label>
-                            <input type="radio" name="existing_cv_id" value="<?= (int) $cv['id'] ?>"
-                                <?= $i === 0 ? 'checked' : '' ?>>
-                            <span class="cv-name"><?= htmlspecialchars($cv['original_name']) ?></span>
-                        </label>
-                        <span class="cv-date"><?= htmlspecialchars(substr($cv['created_at'], 0, 10)) ?></span>
-                        <a class="cv-view-link" href="/email/viewCv/<?= (int) $cv['id'] ?>" target="_blank"
-                            rel="noopener">View</a>
+                    <?php foreach ($myCvs as $cv): ?>
+                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <div>
+                                <p class="font-semibold text-slate-900"><?= htmlspecialchars($cv['original_name']) ?></p>
+                                <p class="text-sm text-slate-500"><?= htmlspecialchars(substr($cv['created_at'], 0, 10)) ?></p>
+                            </div>
+                            <a class="text-indigo-600 text-sm font-semibold hover:underline" href="/email/viewCv/<?= (int) $cv['id'] ?>" target="_blank" rel="noopener">View</a>
+                        </div>
                     </div>
                     <?php endforeach; ?>
-                </div>
                 <?php endif; ?>
-            </div>
-
-            <label>Job Post / Job Description</label>
-
-            <textarea name="job_post" required
-                placeholder="Paste the full job description here..."><?= htmlspecialchars($data['job_post'] ?? '') ?></textarea>
-
-
-
-            <button type="submit">Generate Professional Email</button>
-
-        </form>
-
-
-
-        <?php if (!empty($data['result'])): ?>
-
-        <div class="result-box">
-
-            <h3>Generated Email</h3>
-
-            <div class="result-content" id="emailResult"><?= htmlspecialchars($data['result']) ?></div>
-
-            <button class="copy-btn" onclick="copyResult()">Copy to Clipboard</button>
-
+            </section>
         </div>
 
+        <?php if (!empty($data['result'])): ?>
+        <div class="mt-8 bg-emerald-50 border border-emerald-200 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-slate-900 mb-3">Generated Email</h3>
+            <div class="bg-white border border-emerald-200 rounded-lg p-4 mt-3 whitespace-pre-wrap text-sm text-slate-700" id="emailResult"><?= htmlspecialchars($data['result']) ?></div>
+            <button type="button" onclick="copyResult()"
+                    class="mt-4 inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 transition">
+                Copy to Clipboard
+            </button>
+        </div>
         <?php endif; ?>
-
-    </div>
-
-
+    </main>
 
     <script>
     function copyResult() {
@@ -548,7 +163,6 @@
         navigator.clipboard.writeText(text).then(() => alert('Email copied!'));
     }
 
-    // Toggle between "upload new CV" and "use an existing CV"
     const newRadio = document.getElementById('cvSourceNew');
     const existingRadio = document.getElementById('cvSourceExisting');
     const newSection = document.getElementById('newCvSection');
@@ -557,12 +171,12 @@
 
     function updateCvSource() {
         if (existingRadio.checked) {
-            newSection.style.display = 'none';
-            existingSection.style.display = 'block';
+            newSection.classList.add('hidden');
+            existingSection.classList.remove('hidden');
             cvFileInput.required = false;
         } else {
-            newSection.style.display = 'block';
-            existingSection.style.display = 'none';
+            newSection.classList.remove('hidden');
+            existingSection.classList.add('hidden');
             cvFileInput.required = true;
         }
     }
@@ -573,9 +187,5 @@
         updateCvSource();
     }
     </script>
-
 </body>
-
-
-
 </html>

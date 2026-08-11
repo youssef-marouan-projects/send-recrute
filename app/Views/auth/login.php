@@ -1,130 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($data['title'] ?? 'Log In') ?></title>
-    <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: #f1f5f9;
-        margin: 0;
-        padding: 20px;
-        color: #1e293b;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-    }
-
-    .container {
-        width: 100%;
-        max-width: 420px;
-        background: white;
-        border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        padding: 32px;
-    }
-
-    h1 {
-        margin: 0 0 8px;
-        font-size: 1.6rem;
-    }
-
-    .subtitle {
-        color: #64748b;
-        margin-bottom: 24px;
-    }
-
-    label {
-        display: block;
-        font-weight: 600;
-        margin: 16px 0 6px;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
-        width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        font-size: 15px;
-    }
-
-    button {
-        background: #2563eb;
-        color: white;
-        border: none;
-        padding: 14px 28px;
-        font-size: 16px;
-        font-weight: 600;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-top: 24px;
-        width: 100%;
-    }
-
-    button:hover {
-        background: #1d4ed8;
-    }
-
-    .error {
-        background: #fef2f2;
-        color: #b91c1c;
-        padding: 12px 16px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        border: 1px solid #fecaca;
-    }
-
-    .switch {
-        text-align: center;
-        margin-top: 20px;
-        font-size: 14px;
-        color: #64748b;
-    }
-
-    .switch a {
-        color: #2563eb;
-        font-weight: 600;
-        text-decoration: none;
-    }
-
-    .switch a:hover {
-        text-decoration: underline;
-    }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-
-<body>
-    <div class="container">
-        <h1>Welcome back</h1>
-        <p class="subtitle">Log in to your account</p>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
+        <div class="text-center mb-8">
+            <div class="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-600 text-white text-sm font-bold mb-4">SR</div>
+            <h1 class="text-2xl font-bold text-slate-900">Welcome back</h1>
+            <p class="text-slate-500 text-sm mt-1">Log in to your account</p>
+        </div>
 
         <?php if (!empty($data['error'])): ?>
-        <div class="error"><?= htmlspecialchars($data['error']) ?></div>
+        <div class="mb-6 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm px-4 py-3"><?= htmlspecialchars($data['error']) ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="/auth/authenticate">
-            <label>Email</label>
-            <input type="email" name="email" required value="<?= htmlspecialchars($data['email'] ?? '') ?>">
-
-            <label>Password</label>
-            <input type="password" name="password" required>
-
-            <button type="submit">Log In</button>
+        <form method="POST" action="/auth/authenticate" class="space-y-5">
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                <input type="email" name="email" required value="<?= htmlspecialchars($data['email'] ?? '') ?>"
+                       class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                <input type="password" name="password" required
+                       class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+            <button type="submit"
+                    class="w-full inline-flex justify-center items-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 transition">
+                Log In
+            </button>
         </form>
 
-        <div class="switch">
-            Don't have an account? <a href="/auth/register">Create one</a>
-        </div>
+        <p class="text-center text-sm text-slate-500 mt-6">
+            Don't have an account? <a href="/auth/register" class="text-indigo-600 font-semibold hover:underline">Create one</a>
+        </p>
     </div>
 </body>
-
 </html>
